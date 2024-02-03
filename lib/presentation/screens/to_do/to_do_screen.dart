@@ -1,8 +1,10 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/domain/entities/task.dart';
 import 'package:to_do_list/presentation/providers/to_do_list_provider.dart';
+import 'package:to_do_list/presentation/widgets/shared/confirm_dialog.dart';
 
 class ToDoScreen extends StatelessWidget {
   const ToDoScreen({super.key});
@@ -33,7 +35,9 @@ class ToDoScreen extends StatelessWidget {
                     onTapCallback: () {
                       toDoListProvider.toggleTaskCompletition(task);
                     },
-                    onDeleteCallback: () {},
+                    onDeleteCallback: () {
+                      toDoListProvider.removeTask(task);
+                    },
                     onEditCallback: () {},
                   );
                 },
@@ -180,7 +184,9 @@ class _LisTileStruct extends StatelessWidget {
       leading: _TaskStatusIcon(
         hasCompletedTask: task.isCompleted,
       ),
-      trailing: const _TrailingStruct(),
+      trailing: _TrailingStruct(
+        onDeleteCallback: onDeleteCallback,
+      ),
     );
   }
 }
@@ -240,19 +246,29 @@ class _SubTitleStruct extends StatelessWidget {
 }
 
 class _TrailingStruct extends StatelessWidget {
-  const _TrailingStruct();
+  final VoidCallback onDeleteCallback;
+  const _TrailingStruct({
+    required this.onDeleteCallback,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
-        Icon(
-          Icons.delete,
-          color: Colors.red,
+        ConfirmDialog(
+          title: 'Delete Task',
+          description: 'Are you sure you want to delete this task?',
+          onConfirm: onDeleteCallback,
+          // ignore: prefer_const_constructors
+          iconDialog: Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
+          dialogType: DialogType.warning,
         ),
       ],
     );

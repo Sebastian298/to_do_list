@@ -28,7 +28,7 @@ class ConfirmDialog extends StatelessWidget {
             desc: description,
             btnCancelOnPress: () {},
             btnOkOnPress: onConfirm,
-          );
+          ).show();
         },
         icon: iconDialog);
   }
