@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ToDoScreen extends StatelessWidget {
   const ToDoScreen({super.key});
@@ -26,7 +27,9 @@ class ToDoScreen extends StatelessWidget {
               ),
             ),
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push('/addTask');
+              },
               child: const Icon(Icons.add),
             ),
           ],
