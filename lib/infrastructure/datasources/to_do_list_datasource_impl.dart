@@ -3,9 +3,6 @@ import 'package:to_do_list/domain/entities/task.dart';
 import 'package:to_do_list/presentation/providers/to_do_list_provider.dart';
 
 class ToDoListDatasourceImpl extends ToDoListDataSource {
-  final ToDoListProvider toDoListProvider;
-
-  ToDoListDatasourceImpl({required this.toDoListProvider});
   @override
   Future<Task> addNewTask(String title, String description, DateTime dueDate) {
     if (title.isEmpty) {
@@ -16,18 +13,17 @@ class ToDoListDatasourceImpl extends ToDoListDataSource {
       createdAt: dueDate,
       description: description,
     );
-    toDoListProvider.tasks.add(newTask);
     return Future.value(newTask);
   }
 
   @override
-  Future<void> removeTask(Task task) {
+  Future<void> removeTask(Task task, ToDoListProvider toDoListProvider) {
     toDoListProvider.tasks.remove(task);
     return Future.value();
   }
 
   @override
-  Future<void> updateTask(Task task) {
+  Future<void> updateTask(Task task, ToDoListProvider toDoListProvider) {
     final index =
         toDoListProvider.tasks.indexWhere((element) => element == task);
     toDoListProvider.tasks[index] = task;
