@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_list/domain/entities/task.dart';
+import 'package:to_do_list/presentation/providers/to_do_list_provider.dart';
 
 class ToDoScreen extends StatelessWidget {
   const ToDoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final toDoListProvider = context.watch<ToDoListProvider>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('To Do List'),
@@ -20,16 +24,21 @@ class ToDoScreen extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: 12,
+                controller: toDoListProvider.scrollController,
+                itemCount: toDoListProvider.tasks.length,
                 itemBuilder: (context, index) {
-                  return const _ListTileScreen();
+                  final task = toDoListProvider.tasks[index];
+                  return _ListTileScreen(
+                    task: task,
+                    onTapCallback: () {},
+                    onDeleteCallback: () {},
+                    onEditCallback: () {},
+                  );
                 },
               ),
             ),
             FloatingActionButton(
-              onPressed: () {
-                context.push('/addTask');
-              },
+              onPressed: () {},
               child: const Icon(Icons.add),
             ),
           ],
@@ -40,16 +49,31 @@ class ToDoScreen extends StatelessWidget {
 }
 
 class _ListTileScreen extends StatelessWidget {
-  const _ListTileScreen();
+  final Task task;
+  final VoidCallback onTapCallback;
+  final VoidCallback onDeleteCallback;
+  final VoidCallback onEditCallback;
+
+  const _ListTileScreen({
+    required this.task,
+    required this.onTapCallback,
+    required this.onDeleteCallback,
+    required this.onEditCallback,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
       color: Theme.of(context).colorScheme.surfaceVariant,
-      child: const Column(children: [
-        _LisTileStruct(),
-        SizedBox(
+      child: Column(children: [
+        _LisTileStruct(
+          task: task,
+          onTapCallback: onTapCallback,
+          onDeleteCallback: onDeleteCallback,
+          onEditCallback: onEditCallback,
+        ),
+        const SizedBox(
           height: 7,
         ),
       ]),
@@ -58,15 +82,25 @@ class _ListTileScreen extends StatelessWidget {
 }
 
 class _LisTileStruct extends StatelessWidget {
-  const _LisTileStruct();
+  final Task task;
+  final VoidCallback onTapCallback;
+  final VoidCallback onDeleteCallback;
+  final VoidCallback onEditCallback;
+
+  const _LisTileStruct({
+    required this.task,
+    required this.onTapCallback,
+    required this.onDeleteCallback,
+    required this.onEditCallback,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
-      title: const Text(
-        'Title',
-        style: TextStyle(
+      onTap: onTapCallback,
+      title: Text(
+        task.title,
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ),
@@ -79,11 +113,28 @@ class _LisTileStruct extends StatelessWidget {
         horizontal: 20,
         vertical: 5,
       ),
-      leading: const Icon(
-        Icons.radio_button_unchecked,
-        color: Colors.green,
+      leading: _TaskStatusIcon(
+        hasCompletedTask: task.isCompleted,
       ),
       trailing: const _TrailingStruct(),
+    );
+  }
+}
+
+class _TaskStatusIcon extends StatelessWidget {
+  final bool hasCompletedTask;
+  const _TaskStatusIcon({
+    required this.hasCompletedTask,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final IconData icon = hasCompletedTask
+        ? Icons.radio_button_checked
+        : Icons.radio_button_unchecked;
+    return Icon(
+      icon,
+      color: Colors.blue,
     );
   }
 }
@@ -124,10 +175,6 @@ class _TrailingStruct extends StatelessWidget {
     return const Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          Icons.edit,
-          color: Colors.blue,
-        ),
         SizedBox(
           width: 10,
         ),
