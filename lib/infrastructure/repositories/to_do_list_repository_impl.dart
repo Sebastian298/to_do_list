@@ -4,7 +4,7 @@ import 'package:to_do_list/presentation/providers/to_do_list_provider.dart';
 
 class ToDoListRepositoryImpl extends ToDoListRepository {
   @override
-  Future<Task> addNewTask(String title, String description, DateTime dueDate) {
+  Future<Task> addNewTask(String title, String description, String dueDate) {
     return ToDoListRepositoryImpl().addNewTask(title, description, dueDate);
   }
 

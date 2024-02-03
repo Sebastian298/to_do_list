@@ -2,7 +2,7 @@ class Task {
   final String title;
   final String description;
   final bool isCompleted;
-  final DateTime createdAt;
+  final String createdAt;
 
   Task({
     required this.title,

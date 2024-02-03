@@ -4,10 +4,7 @@ import 'package:to_do_list/presentation/providers/to_do_list_provider.dart';
 
 class ToDoListDatasourceImpl extends ToDoListDataSource {
   @override
-  Future<Task> addNewTask(String title, String description, DateTime dueDate) {
-    if (title.isEmpty) {
-      return Future.error('Title cannot be empty');
-    }
+  Future<Task> addNewTask(String title, String description, String dueDate) {
     final newTask = Task(
       title: title,
       createdAt: dueDate,
