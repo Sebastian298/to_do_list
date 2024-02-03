@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_list/config/router/app_router.dart';
 import 'package:to_do_list/config/theme/app_theme.dart';
 
 void main() {
@@ -10,11 +11,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: appRouter,
       title: 'To do List',
       debugShowCheckedModeBanner: false,
       theme: AppTheme(selectedColor: 1).theme(),
-      home: const Placeholder(),
     );
   }
 }
