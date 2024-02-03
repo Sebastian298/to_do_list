@@ -3,14 +3,8 @@ import 'package:to_do_list/domain/repositories/to_do_list_repository.dart';
 
 class ToDoListRepositoryImpl extends ToDoListRepository {
   @override
-  Future<Task> addNewTask(Task task) {
+  Future<Task> addNewTask(String title, String description, DateTime dueDate) {
     // TODO: implement addNewTask
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Task>> getTasks() {
-    // TODO: implement getTasks
     throw UnimplementedError();
   }
 
