@@ -19,6 +19,7 @@ class ToDoListProvider extends ChangeNotifier {
         await toDoListRepository.addNewTask(title, description, dueDate);
     tasks.add(newTask);
     notifyListeners();
+    moveScrollToBottom();
   }
 
   Future<void> removeTask(Task task) async {

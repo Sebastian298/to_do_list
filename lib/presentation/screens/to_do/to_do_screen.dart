@@ -30,7 +30,9 @@ class ToDoScreen extends StatelessWidget {
                   final task = toDoListProvider.tasks[index];
                   return _ListTileScreen(
                     task: task,
-                    onTapCallback: () {},
+                    onTapCallback: () {
+                      toDoListProvider.toggleTaskCompletition(task);
+                    },
                     onDeleteCallback: () {},
                     onEditCallback: () {},
                   );
@@ -120,7 +122,9 @@ class _ListTileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: task.isCompleted
+          ? Colors.green[300]
+          : Theme.of(context).colorScheme.surfaceVariant,
       child: Column(children: [
         _LisTileStruct(
           task: task,
@@ -155,14 +159,16 @@ class _LisTileStruct extends StatelessWidget {
       onTap: onTapCallback,
       title: Text(
         task.title,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 16,
+          decoration: task.isCompleted ? TextDecoration.lineThrough : null,
         ),
       ),
       subtitle: _SubTitleStruct(
         description: task.description,
         date: task.createdAt,
+        isCompleted: task.isCompleted,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -200,9 +206,11 @@ class _TaskStatusIcon extends StatelessWidget {
 class _SubTitleStruct extends StatelessWidget {
   final String description;
   final String date;
+  final bool isCompleted;
   const _SubTitleStruct({
     required this.description,
     required this.date,
+    required this.isCompleted,
   });
 
   @override
@@ -212,8 +220,9 @@ class _SubTitleStruct extends StatelessWidget {
       children: [
         Text(
           description,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
+            decoration: isCompleted ? TextDecoration.lineThrough : null,
           ),
         ),
         const SizedBox(
