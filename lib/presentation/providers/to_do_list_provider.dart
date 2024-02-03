@@ -19,4 +19,24 @@ class ToDoListProvider extends ChangeNotifier {
     tasks.add(newTask);
     notifyListeners();
   }
+
+  Future<void> removeTask(Task task) async {
+    await toDoListRepository.removeTask(task, this);
+    tasks.remove(task);
+    notifyListeners();
+  }
+
+  Future<void> updateTask(Task task) async {
+    await toDoListRepository.updateTask(task, this);
+    //final index = tasks.indexWhere((element) => element == task);
+    //tasks[index] = task;
+    notifyListeners();
+  }
+
+  Future<void> toggleTaskCompletition(Task task) async {
+    await toDoListRepository.toggleTaskCompletition(task, this);
+    //final index = tasks.indexWhere((element) => element == task);
+    //tasks[index].isCompleted = !task.isCompleted;
+    notifyListeners();
+  }
 }

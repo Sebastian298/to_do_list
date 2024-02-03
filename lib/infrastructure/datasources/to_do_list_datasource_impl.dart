@@ -26,4 +26,13 @@ class ToDoListDatasourceImpl extends ToDoListDataSource {
     toDoListProvider.tasks[index] = task;
     return Future.value();
   }
+
+  @override
+  Future<void> toggleTaskCompletition(
+      Task task, ToDoListProvider toDoListProvider) {
+    final index =
+        toDoListProvider.tasks.indexWhere((element) => element == task);
+    toDoListProvider.tasks[index].isCompleted = !task.isCompleted;
+    return Future.value();
+  }
 }

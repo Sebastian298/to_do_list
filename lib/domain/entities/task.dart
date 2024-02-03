@@ -1,7 +1,7 @@
 class Task {
-  final String title;
-  final String description;
-  final bool isCompleted;
+  String title;
+  String description;
+  bool isCompleted;
   final String createdAt;
 
   Task({

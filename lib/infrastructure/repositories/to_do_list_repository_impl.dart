@@ -17,4 +17,11 @@ class ToDoListRepositoryImpl extends ToDoListRepository {
   Future<void> updateTask(Task task, ToDoListProvider toDoListProvider) {
     return ToDoListRepositoryImpl().updateTask(task, toDoListProvider);
   }
+
+  @override
+  Future<void> toggleTaskCompletition(
+      Task task, ToDoListProvider toDoListProvider) {
+    return ToDoListRepositoryImpl()
+        .toggleTaskCompletition(task, toDoListProvider);
+  }
 }
