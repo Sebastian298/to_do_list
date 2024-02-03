@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/domain/entities/task.dart';
 import 'package:to_do_list/presentation/providers/to_do_list_provider.dart';
@@ -38,7 +38,9 @@ class ToDoScreen extends StatelessWidget {
               ),
             ),
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                _showAddTaskDialog(context, toDoListProvider.addNewTask);
+              },
               child: const Icon(Icons.add),
             ),
           ],
@@ -46,6 +48,59 @@ class ToDoScreen extends StatelessWidget {
       )),
     );
   }
+}
+
+void _showAddTaskDialog(
+  BuildContext context,
+  Function(String, String, String) addNewTaskFunction,
+) {
+  String title = '';
+  String description = '';
+  final String createdAt =
+      DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Add Task'), // Título del AlertDialog
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              onChanged: (value) {
+                title =
+                    value; // Actualizar el valor del título al cambiar el texto
+              },
+              decoration: const InputDecoration(labelText: 'Title'),
+            ),
+            TextField(
+              onChanged: (value) {
+                description =
+                    value; // Actualizar el valor de la descripción al cambiar el texto
+              },
+              decoration: const InputDecoration(labelText: 'Description'),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              addNewTaskFunction(title, description, createdAt);
+              Navigator.of(context).pop();
+            },
+            child: const Text('Save'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Cerrar el AlertDialog
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class _ListTileScreen extends StatelessWidget {
@@ -105,7 +160,10 @@ class _LisTileStruct extends StatelessWidget {
           fontSize: 16,
         ),
       ),
-      subtitle: const _SubTitleStruct(),
+      subtitle: _SubTitleStruct(
+        description: task.description,
+        date: task.createdAt,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -140,25 +198,30 @@ class _TaskStatusIcon extends StatelessWidget {
 }
 
 class _SubTitleStruct extends StatelessWidget {
-  const _SubTitleStruct();
+  final String description;
+  final String date;
+  const _SubTitleStruct({
+    required this.description,
+    required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Description',
-          style: TextStyle(
+          description,
+          style: const TextStyle(
             fontSize: 14,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         Text(
-          'Date',
-          style: TextStyle(
+          date,
+          style: const TextStyle(
             fontSize: 12,
           ),
         ),
